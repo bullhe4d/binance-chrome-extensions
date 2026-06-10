@@ -3,14 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      body {
-        width: 520px;
-        padding: 16px;
-        font-family: sans-serif;
+      body { width: 520px; padding: 16px; font-family: sans-serif; background: #111; color: #eee; }
+      h3 { margin: 0 0 12px; color: #f0b90b; }
+      .warning-box {
+        background: #1a1200;
+        border: 1px solid #f0b90b;
+        border-left: 4px solid #e53935;
+        border-radius: 4px;
+        padding: 8px 10px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: #bba060;
+        line-height: 1.5;
       }
-      h3 {
-        margin: 0 0 12px;
+      .warning-box strong { color: #e53935; }
+      .row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+      label { font-size: 12px; color: #888; white-space: nowrap; }
+      input {
+        flex: 1;
+        padding: 7px 10px;
+        background: #222;
+        border: 1px solid #444;
+        border-radius: 4px;
+        color: #eee;
+        font-size: 13px;
       }
+      input:focus { outline: none; border-color: #f0b90b; }
+      input::placeholder { color: #555; }
       button {
         width: 100%;
         padding: 10px;
@@ -18,72 +37,51 @@
         border-radius: 6px;
         font-weight: bold;
         cursor: pointer;
+        font-size: 14px;
       }
-      #btn {
-        background: #f0b90b;
-      }
-      #btn:hover {
-        background: #d4a409;
-      }
-      #copyBtn {
-        background: #4caf50;
-        color: white;
-        margin-top: 8px;
-      }
-      #copyBtn:hover {
-        background: #388e3c;
-      }
+      #listenBtn { background: #f0b90b; color: #111; }
+      #listenBtn:hover { background: #d4a409; }
+      #listenBtn.listening { background: #e53935; color: #fff; }
+      #listenBtn.listening:hover { background: #c62828; }
+      #copyBtn { background: #2e7d32; color: white; margin-top: 8px; }
+      #copyBtn:hover { background: #1b5e20; }
       #curlOutput {
         width: 100%;
         height: 220px;
         font-size: 11px;
         font-family: monospace;
-        border: 1px solid #ccc;
+        border: 1px solid #333;
         border-radius: 4px;
         padding: 8px;
         box-sizing: border-box;
         resize: vertical;
-        background: #f8f8f8;
-        color: #222;
+        background: #1a1a1a;
+        color: #ccc;
         margin-top: 10px;
       }
-      #status {
-        margin-top: 10px;
-        font-size: 13px;
-        color: #333;
-        min-height: 18px;
-      }
-      .success {
-        color: green;
-      }
-      .error {
-        color: red;
-      }
-      .warning-box {
-        background: #fff3cd;
-        border: 1px solid #f0b90b;
-        border-left: 4px solid #e53935;
-        border-radius: 4px;
-        padding: 8px 10px;
-        margin-bottom: 12px;
-        font-size: 12px;
-        color: #7a4f00;
-        line-height: 1.5;
-      }
-      .warning-box strong {
-        color: #c62828;
-      }
+      #status { margin-top: 10px; font-size: 13px; min-height: 18px; color: #aaa; }
+      .success { color: #66bb6a; }
+      .error { color: #ef5350; }
+      @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+      .pulse { color: #f0b90b; animation: pulse 1s infinite; }
     </style>
   </head>
   <body>
     <h3>🔑 币安Alpha信息获取</h3>
     <div class="warning-box">
-      ⚠️ <strong>安全警告：</strong>此 curl 命令包含您的登录凭证与身份 token，<strong>请勿向任何人泄露</strong>，否则他人可直接操作您的账户，造成不可挽回的财产损失。
+      ⚠️ <strong>安全警告：</strong>生成的 curl 包含登录凭证，<strong>请勿向任何人泄露</strong>，否则他人可直接操作你的账户，造成财产损失。
     </div>
-    <button id="btn">获取curl</button>
-    <textarea id="curlOutput" readonly></textarea>
+
+    <div class="row">
+      <label>接口关键词</label>
+      <input id="urlKeyword" placeholder="如: wallet/asset 或 get-all-asset" />
+    </div>
+
+    <button id="listenBtn">开始监听</button>
+    <textarea id="curlOutput" readonly placeholder="点击「开始监听」后，在币安页面触发对应请求，curl 自动生成..."></textarea>
     <button id="copyBtn">复制 curl 命令</button>
     <div id="status"></div>
+
     <script src="popup.js"></script>
   </body>
 </html>
