@@ -54,7 +54,7 @@ function tryComplete(requestId) {
   delete pending[requestId];
   chrome.storage.local.set({ capturedCurl: buildCurl(req), capturedAt: Date.now() });
   setStatusIcon('captured');
-  stopListening();
+  stopListening(true); // true = 保留图标，不重置成红色
 }
 
 function buildCurl(req) {
@@ -86,13 +86,13 @@ async function startListening(tabId, keyword) {
   chrome.storage.local.set({ listenState: { active: true, keyword, tabId } });
 }
 
-async function stopListening() {
+async function stopListening(keepIcon = false) {
   chrome.debugger.onEvent.removeListener(onDebugEvent);
   if (debugTabId !== null) {
     try { await chrome.debugger.detach({ tabId: debugTabId }); } catch (_) {}
     debugTabId = null;
   }
-  setStatusIcon('idle');
+  if (!keepIcon) setStatusIcon('idle');
   chrome.storage.local.set({ listenState: { active: false } });
 }
 
