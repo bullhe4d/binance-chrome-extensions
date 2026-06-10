@@ -1,7 +1,3 @@
-// 启动时默认红色（未获取）
-chrome.runtime.onInstalled.addListener(() => setBadge('idle'));
-chrome.runtime.onStartup.addListener(() => setBadge('idle'));
-
 function setBadge(state) {
   const map = {
     idle:      { text: '●', color: '#e53935' },
@@ -12,6 +8,17 @@ function setBadge(state) {
   chrome.action.setBadgeText({ text });
   chrome.action.setBadgeBackgroundColor({ color });
 }
+
+// 启动时根据 storage 恢复正确的 badge 状态
+async function restoreBadge() {
+  const { capturedCurl, listenState } = await chrome.storage.local.get(['capturedCurl', 'listenState']);
+  if (listenState?.active) setBadge('listening');
+  else if (capturedCurl)   setBadge('captured');
+  else                     setBadge('idle');
+}
+chrome.runtime.onInstalled.addListener(restoreBadge);
+chrome.runtime.onStartup.addListener(restoreBadge);
+restoreBadge();
 
 let debugTabId = null;
 let urlPattern = '';
@@ -61,6 +68,7 @@ function buildCurl(req) {
   const headerLines = [];
 
   for (const [k, v] of Object.entries(headers)) {
+    if (k.startsWith(':')) continue; // 过滤 HTTP/2 伪头 :authority :method :path :scheme
     if (k.toLowerCase() === 'cookie') {
       cookieStr = v;
     } else {
