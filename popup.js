@@ -80,7 +80,8 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
 
   if (resp.ok) {
     setListeningUI(true);
-    setStatus('⏳ 正在监听，请在币安页面触发对应请求...', 'pulse');
+    setStatus('⏳ 正在刷新页面并监听...', 'pulse');
+    chrome.tabs.reload(tab.id);
   } else {
     showToast(`❌ 启动失败: ${resp.error}`);
   }
