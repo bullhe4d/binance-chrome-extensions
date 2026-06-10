@@ -64,12 +64,48 @@
       .error { color: #ef5350; }
       @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
       .pulse { color: #f0b90b; animation: pulse 1s infinite; }
+      .steps {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        color: #bbb;
+        padding: 4px 0;
+      }
+      .step + .step { border-top: 1px solid #222; }
+      .num {
+        width: 18px;
+        height: 18px;
+        background: #f0b90b;
+        color: #111;
+        border-radius: 50%;
+        font-size: 11px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
     </style>
   </head>
   <body>
     <h3>🔑 币安Alpha信息获取</h3>
     <div class="warning-box">
       ⚠️ <strong>安全警告：</strong>生成的 curl 包含登录凭证，<strong>请勿向任何人泄露</strong>，否则他人可直接操作你的账户，造成财产损失。
+    </div>
+
+    <div class="steps">
+      <div class="step"><span class="num">1</span>输入接口关键词，点「开始监听」</div>
+      <div class="step"><span class="num">2</span>关掉此窗口，切到币安页面正常操作</div>
+      <div class="step"><span class="num">3</span>图标变 <strong style="color:#4caf50">✓</strong> 表示捕获成功</div>
+      <div class="step"><span class="num">4</span>重新点开插件，复制 curl 命令即可</div>
     </div>
 
     <div class="row">
