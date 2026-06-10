@@ -12,10 +12,7 @@ function getKeyword() {
 
 // ── 初始化：恢复上次状态 ──────────────────────────────────────────────────────
 async function init() {
-  const { listenState, capturedCurl } = await chrome.storage.local.get([
-    'listenState',
-    'capturedCurl',
-  ]);
+  const { listenState } = await chrome.storage.local.get('listenState');
 
   if (listenState?.active) {
     setListeningUI(true);
@@ -33,9 +30,6 @@ async function init() {
     }
   }
 
-  if (capturedCurl) {
-    document.getElementById('curlOutput').value = capturedCurl;
-  }
 }
 
 // ── 监听 background 捕获结果（popup 打开期间实时更新）────────────────────────
