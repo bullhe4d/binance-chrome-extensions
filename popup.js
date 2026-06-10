@@ -1,3 +1,15 @@
+// ── 下拉切换显示自定义输入框 ──────────────────────────────────────────────────
+document.getElementById('urlPreset').addEventListener('change', (e) => {
+  document.getElementById('customRow').style.display =
+    e.target.value === '__custom__' ? 'flex' : 'none';
+});
+
+function getKeyword() {
+  const preset = document.getElementById('urlPreset').value;
+  if (preset === '__custom__') return document.getElementById('urlKeyword').value.trim();
+  return preset;
+}
+
 // ── 初始化：恢复上次状态 ──────────────────────────────────────────────────────
 async function init() {
   const { listenState, capturedCurl } = await chrome.storage.local.get([
@@ -9,7 +21,15 @@ async function init() {
     setListeningUI(true);
     setStatus('⏳ 正在监听，请在币安页面触发对应请求...', 'pulse');
     if (listenState.keyword) {
-      document.getElementById('urlKeyword').value = listenState.keyword;
+      const preset = document.getElementById('urlPreset');
+      const match = [...preset.options].find((o) => o.value === listenState.keyword);
+      if (match) {
+        preset.value = listenState.keyword;
+      } else {
+        preset.value = '__custom__';
+        document.getElementById('customRow').style.display = 'flex';
+        document.getElementById('urlKeyword').value = listenState.keyword;
+      }
     }
   }
 
@@ -41,7 +61,7 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
     return;
   }
 
-  const keyword = document.getElementById('urlKeyword').value.trim();
+  const keyword = getKeyword();
   if (!keyword) {
     setStatus('请先输入接口关键词', 'error');
     return;

@@ -19,6 +19,17 @@
       .warning-box strong { color: #e53935; }
       .row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
       label { font-size: 12px; color: #888; white-space: nowrap; }
+      select {
+        flex: 1;
+        padding: 7px 10px;
+        background: #222;
+        border: 1px solid #444;
+        border-radius: 4px;
+        color: #eee;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      select:focus { outline: none; border-color: #f0b90b; }
       input {
         flex: 1;
         padding: 7px 10px;
@@ -30,6 +41,7 @@
       }
       input:focus { outline: none; border-color: #f0b90b; }
       input::placeholder { color: #555; }
+      #customRow { display: none; margin-bottom: 10px; }
       button {
         width: 100%;
         padding: 10px;
@@ -110,7 +122,16 @@
 
     <div class="row">
       <label>接口关键词</label>
-      <input id="urlKeyword" value="alpha-trade/order/place" placeholder="如: wallet/asset 或 get-all-asset" />
+      <select id="urlPreset">
+        <option value="alpha-trade/order/place">下单接口</option>
+        <option value="get-wallet-asset">余额接口</option>
+        <option value="__custom__">其他（手动输入）</option>
+      </select>
+    </div>
+
+    <div class="row" id="customRow">
+      <label>关键词</label>
+      <input id="urlKeyword" placeholder="输入接口关键词，如 wallet/asset" />
     </div>
 
     <button id="listenBtn">开始监听</button>
