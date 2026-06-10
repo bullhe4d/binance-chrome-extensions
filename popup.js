@@ -87,6 +87,14 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
   }
 });
 
+// ── 清空按钮 ───────────────────────────────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('curlOutput').value = '';
+  setStatus('', '');
+  chrome.storage.local.remove('capturedCurl');
+  chrome.action.setBadgeText({ text: '' });
+});
+
 // ── 复制按钮 ───────────────────────────────────────────────────────────────────
 document.getElementById('copyBtn').addEventListener('click', () => {
   const curl = document.getElementById('curlOutput').value;

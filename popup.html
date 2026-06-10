@@ -55,8 +55,10 @@
       #listenBtn:hover { background: #d4a409; }
       #listenBtn.listening { background: #e53935; color: #fff; }
       #listenBtn.listening:hover { background: #c62828; }
-      #copyBtn { background: #2e7d32; color: white; margin-top: 8px; }
+      #copyBtn { background: #2e7d32; color: white; }
       #copyBtn:hover { background: #1b5e20; }
+      #clearBtn { background: #333; color: #aaa; flex: 0 0 64px; }
+      #clearBtn:hover { background: #444; color: #eee; }
       #curlOutput {
         width: 100%;
         height: 120px;
@@ -151,7 +153,10 @@
 
     <button id="listenBtn">开始监听</button>
     <textarea id="curlOutput" readonly placeholder="点击「开始监听」后，在币安页面触发对应请求，curl 自动生成..."></textarea>
-    <button id="copyBtn">复制 curl 命令</button>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button id="copyBtn" style="margin-top:0">复制 curl 命令</button>
+      <button id="clearBtn">清空</button>
+    </div>
     <div id="status"></div>
 
     <script src="popup.js"></script>
