@@ -63,13 +63,13 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
 
   const keyword = getKeyword();
   if (!keyword) {
-    setStatus('请先输入接口关键词', 'error');
+    showToast('⚠️ 请先输入接口关键词');
     return;
   }
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.url?.includes('binance.com')) {
-    setStatus('❌ 请先切换到币安页面再开始监听', 'error');
+    showToast('❌ 请先切换到币安页面再开始监听');
     return;
   }
 
@@ -83,7 +83,7 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
     setListeningUI(true);
     setStatus('⏳ 正在监听，请在币安页面触发对应请求...', 'pulse');
   } else {
-    setStatus(`❌ 启动失败: ${resp.error}`, 'error');
+    showToast(`❌ 启动失败: ${resp.error}`);
   }
 });
 
@@ -109,6 +109,15 @@ function setStatus(msg, cls = '') {
   const el = document.getElementById('status');
   el.textContent = msg;
   el.className = cls;
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
 
 init();
