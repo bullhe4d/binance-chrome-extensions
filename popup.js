@@ -52,8 +52,8 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
 
   if (resp.ok) {
     setListeningUI(true);
-    setStatus('⏳ 正在刷新页面并监听...', 'pulse');
-    chrome.tabs.reload(tab.id);
+    setStatus('⏳ 正在跳转页面并监听...', 'pulse');
+    chrome.tabs.update(tab.id, { url: 'https://www.binance.com/zh-CN/alpha/' });
   } else {
     showToast(`❌ 启动失败: ${resp.error}`);
   }
