@@ -1,3 +1,18 @@
+// 启动时默认红色（未获取）
+chrome.runtime.onInstalled.addListener(() => setBadge('idle'));
+chrome.runtime.onStartup.addListener(() => setBadge('idle'));
+
+function setBadge(state) {
+  const map = {
+    idle:      { text: '●', color: '#e53935' },
+    listening: { text: '●', color: '#f0b90b' },
+    captured:  { text: '✓', color: '#4caf50' },
+  };
+  const { text, color } = map[state] || map.idle;
+  chrome.action.setBadgeText({ text });
+  chrome.action.setBadgeBackgroundColor({ color });
+}
+
 let debugTabId = null;
 let urlPattern = '';
 const pending = {};
@@ -35,10 +50,7 @@ function tryComplete(requestId) {
 
   const curl = buildCurl(req);
   chrome.storage.local.set({ capturedCurl: curl, capturedAt: Date.now() });
-
-  // 图标绿色对勾提示已捕获
-  chrome.action.setBadgeText({ text: '✓' });
-  chrome.action.setBadgeBackgroundColor({ color: '#4caf50' });
+  setBadge('captured');
 
   stopListening();
 }
@@ -75,8 +87,7 @@ async function startListening(tabId, keyword) {
   await chrome.debugger.sendCommand({ tabId }, 'Network.enable', {});
   chrome.debugger.onEvent.addListener(onDebugEvent);
 
-  chrome.action.setBadgeText({ text: '●' });
-  chrome.action.setBadgeBackgroundColor({ color: '#f0b90b' });
+  setBadge('listening');
   chrome.storage.local.set({ listenState: { active: true, keyword, tabId } });
 }
 
@@ -86,12 +97,17 @@ async function stopListening() {
     try { await chrome.debugger.detach({ tabId: debugTabId }); } catch (_) {}
     debugTabId = null;
   }
-  chrome.action.setBadgeText({ text: '' });
+  setBadge('idle');
   chrome.storage.local.set({ listenState: { active: false } });
 }
 
 // ── 接收 popup 指令 ────────────────────────────────────────────────────────────
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === 'RESET_BADGE') {
+    setBadge('idle');
+    sendResponse({ ok: true });
+    return;
+  }
   if (msg.type === 'START_LISTEN') {
     startListening(msg.tabId, msg.keyword)
       .then(() => sendResponse({ ok: true }))

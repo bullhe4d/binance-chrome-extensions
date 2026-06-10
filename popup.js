@@ -64,7 +64,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('curlOutput').value = '';
   setStatus('', '');
   chrome.storage.local.remove('capturedCurl');
-  chrome.action.setBadgeText({ text: '' });
+  chrome.runtime.sendMessage({ type: 'RESET_BADGE' });
 });
 
 // ── 复制按钮 ───────────────────────────────────────────────────────────────────
