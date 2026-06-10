@@ -12,7 +12,12 @@ function getKeyword() {
 
 // ── 初始化：恢复上次状态 ──────────────────────────────────────────────────────
 async function init() {
-  const { listenState } = await chrome.storage.local.get('listenState');
+  const { listenState, capturedCurl } = await chrome.storage.local.get(['listenState', 'capturedCurl']);
+
+  if (capturedCurl) {
+    document.getElementById('curlOutput').value = capturedCurl;
+    setStatus('✅ 捕获成功，curl 已生成', 'success');
+  }
 
   if (listenState?.active) {
     setListeningUI(true);
