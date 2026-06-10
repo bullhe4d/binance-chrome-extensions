@@ -1,46 +1,10 @@
-// ── 状态图标（用 OffscreenCanvas 在 BA 图标右下角画小圆点）─────────────────────
-const DOT_COLORS = {
-  idle:      '#e53935',
-  listening: '#f0b90b',
-  captured:  '#4caf50',
-};
-
-function drawIcon(size, dotColor) {
-  const c = new OffscreenCanvas(size, size);
-  const ctx = c.getContext('2d');
-
-  // 黑色背景
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, size, size);
-
-  // 黄色 "BA" 文字
-  ctx.fillStyle = '#f0b90b';
-  ctx.font = `bold ${Math.round(size * 0.42)}px Arial`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('BA', size / 2, size / 2);
-
-  // 右下角状态小圆点
-  const r = Math.max(3, Math.round(size * 0.16));
-  const cx = size - r - 1, cy = size - r - 1;
-  ctx.fillStyle = '#111'; // 白边用深色分隔
-  ctx.beginPath();
-  ctx.arc(cx, cy, r + 1.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = dotColor;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.fill();
-
-  return ctx.getImageData(0, 0, size, size);
-}
-
+// ── 状态图标（预生成 PNG，右下角带彩色圆点）──────────────────────────────────
 async function setStatusIcon(state) {
-  const color = DOT_COLORS[state] || DOT_COLORS.idle;
+  const s = state in { idle:1, listening:1, captured:1 } ? state : 'idle';
   await chrome.action.setIcon({
-    imageData: { 16: drawIcon(16, color), 48: drawIcon(48, color) },
+    path: { 16: `icons/${s}/icon16.png`, 48: `icons/${s}/icon48.png`, 128: `icons/${s}/icon128.png` },
   });
-  chrome.action.setBadgeText({ text: '' }); // 清掉旧 badge
+  chrome.action.setBadgeText({ text: '' });
 }
 
 // 启动时根据 storage 恢复正确状态
