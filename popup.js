@@ -1,16 +1,6 @@
-// ── 下拉切换显示自定义输入框 ──────────────────────────────────────────────────
-document.getElementById('urlPreset').addEventListener('change', (e) => {
-  document.getElementById('customRow').style.display =
-    e.target.value === '__custom__' ? 'flex' : 'none';
-});
+const KEYWORD = 'get-wallet-asset';
 
-function getKeyword() {
-  const preset = document.getElementById('urlPreset').value;
-  if (preset === '__custom__') return document.getElementById('urlKeyword').value.trim();
-  return preset;
-}
-
-// ── 初始化：恢复上次状态 ──────────────────────────────────────────────────────
+// ── 初始化：恢复上次捕获结果 ──────────────────────────────────────────────────
 async function init() {
   const { listenState, capturedCurl } = await chrome.storage.local.get(['listenState', 'capturedCurl']);
 
@@ -21,20 +11,8 @@ async function init() {
 
   if (listenState?.active) {
     setListeningUI(true);
-    setStatus('⏳ 正在监听，请在币安页面触发对应请求...', 'pulse');
-    if (listenState.keyword) {
-      const preset = document.getElementById('urlPreset');
-      const match = [...preset.options].find((o) => o.value === listenState.keyword);
-      if (match) {
-        preset.value = listenState.keyword;
-      } else {
-        preset.value = '__custom__';
-        document.getElementById('customRow').style.display = 'flex';
-        document.getElementById('urlKeyword').value = listenState.keyword;
-      }
-    }
+    setStatus('⏳ 正在刷新页面并监听...', 'pulse');
   }
-
 }
 
 // ── 监听 background 捕获结果（popup 打开期间实时更新）────────────────────────
@@ -60,12 +38,6 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
     return;
   }
 
-  const keyword = getKeyword();
-  if (!keyword) {
-    showToast('⚠️ 请先输入接口关键词');
-    return;
-  }
-
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.url?.includes('binance.com')) {
     showToast('❌ 请先切换到币安页面再开始监听');
@@ -75,7 +47,7 @@ document.getElementById('listenBtn').addEventListener('click', async () => {
   const resp = await chrome.runtime.sendMessage({
     type: 'START_LISTEN',
     tabId: tab.id,
-    keyword,
+    keyword: KEYWORD,
   });
 
   if (resp.ok) {
