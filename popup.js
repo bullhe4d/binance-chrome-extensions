@@ -91,6 +91,8 @@ async function startListening() {
   Object.keys(pending).forEach((k) => delete pending[k]);
 
   try {
+    // 先尝试清理上次残留的 debugger
+    try { await chrome.debugger.detach({ tabId: debugTabId }); } catch (_) {}
     await chrome.debugger.attach({ tabId: debugTabId }, '1.3');
     await chrome.debugger.sendCommand({ tabId: debugTabId }, 'Network.enable', {});
     chrome.debugger.onEvent.addListener(onDebugEvent);
