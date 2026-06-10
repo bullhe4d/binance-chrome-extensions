@@ -3,7 +3,8 @@
   "name": "Binance Cookie → curl",
   "version": "1.1",
   "description": "监听币安接口，生成完整 curl 命令",
-  "permissions": ["activeTab", "tabs", "debugger"],
+  "permissions": ["activeTab", "tabs", "debugger", "storage"],
+  "background": { "service_worker": "background.js" },
   "host_permissions": ["https://*.binance.com/*"],
   "icons": {
     "16": "icons/icon16.png",
