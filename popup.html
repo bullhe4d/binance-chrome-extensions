@@ -3,8 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      body { width: 400px; padding: 16px; font-family: sans-serif; background: #111; color: #eee; }
-      h3 { margin: 0 0 12px; color: #f0b90b; }
+      body {
+        width: 400px;
+        padding: 16px;
+        font-family: sans-serif;
+        background: #111;
+        color: #eee;
+      }
+      h3 {
+        margin: 0 0 12px;
+        color: #f0b90b;
+      }
       .warning-box {
         background: #1a1200;
         border: 1px solid #f0b90b;
@@ -16,7 +25,9 @@
         color: #bba060;
         line-height: 1.5;
       }
-      .warning-box strong { color: #e53935; }
+      .warning-box strong {
+        color: #e53935;
+      }
       button {
         width: 100%;
         padding: 10px;
@@ -26,14 +37,36 @@
         cursor: pointer;
         font-size: 14px;
       }
-      #listenBtn { background: #f0b90b; color: #111; }
-      #listenBtn:hover { background: #d4a409; }
-      #listenBtn.listening { background: #e53935; color: #fff; }
-      #listenBtn.listening:hover { background: #c62828; }
-      #copyBtn { background: #2e7d32; color: white; }
-      #copyBtn:hover { background: #1b5e20; }
-      #clearBtn { background: #333; color: #aaa; flex: 0 0 64px; }
-      #clearBtn:hover { background: #444; color: #eee; }
+      #listenBtn {
+        background: #f0b90b;
+        color: #111;
+      }
+      #listenBtn:hover {
+        background: #d4a409;
+      }
+      #listenBtn.listening {
+        background: #e53935;
+        color: #fff;
+      }
+      #listenBtn.listening:hover {
+        background: #c62828;
+      }
+      #copyBtn {
+        background: #2e7d32;
+        color: white;
+      }
+      #copyBtn:hover {
+        background: #1b5e20;
+      }
+      #clearBtn {
+        background: #333;
+        color: #aaa;
+        flex: 0 0 64px;
+      }
+      #clearBtn:hover {
+        background: #444;
+        color: #eee;
+      }
       #curlOutput {
         width: 100%;
         height: 120px;
@@ -48,15 +81,37 @@
         color: #ccc;
         margin-top: 10px;
       }
-      #status { margin-top: 10px; font-size: 13px; min-height: 18px; color: #aaa; }
-      .success { color: #66bb6a; }
-      .error { color: #ef5350; }
-      @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-      .pulse { color: #f0b90b; animation: pulse 1s infinite; }
+      #status {
+        margin-top: 10px;
+        font-size: 13px;
+        min-height: 18px;
+        color: #aaa;
+      }
+      .success {
+        color: #66bb6a;
+      }
+      .error {
+        color: #ef5350;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+      .pulse {
+        color: #f0b90b;
+        animation: pulse 1s infinite;
+      }
       #toast {
         display: none;
         position: fixed;
-        top: 0; left: 0; right: 0;
+        top: 0;
+        left: 0;
+        right: 0;
         background: #c62828;
         color: #fff;
         font-size: 13px;
@@ -64,21 +119,33 @@
         text-align: center;
         padding: 10px 16px;
         z-index: 999;
-        animation: slideDown .2s ease;
+        animation: slideDown 0.2s ease;
       }
-      @keyframes slideDown { from { transform: translateY(-100%) } to { transform: translateY(0) } }
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
     </style>
   </head>
   <body>
     <div id="toast"></div>
     <h3>🔑 币安Alpha信息获取</h3>
     <div class="warning-box">
-      ⚠️ <strong>安全警告：</strong>生成的 curl 包含登录凭证，<strong>请勿向任何人泄露</strong>，否则他人可直接操作你的账户，造成财产损失。
+      ⚠️ <strong>安全警告：</strong>生成的 curl
+      包含登录凭证，<strong>请勿向任何人泄露</strong>，否则他人可直接操作你的账户，造成财产损失。
     </div>
 
-    <button id="listenBtn">开始监听</button>
-    <textarea id="curlOutput" readonly placeholder="点击「开始监听」后自动刷新页面并捕获..."></textarea>
-    <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="listenBtn">获取</button>
+    <textarea
+      id="curlOutput"
+      readonly
+      placeholder="点击「获取」后自动刷新页面并捕获..."
+    ></textarea>
+    <div style="display: flex; gap: 8px; margin-top: 8px">
       <button id="copyBtn">复制 curl 命令</button>
       <button id="clearBtn">清空</button>
     </div>
