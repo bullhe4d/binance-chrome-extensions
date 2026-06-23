@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Binance Cookie → curl",
-  "version": "1.1",
+  "version": "1.4",
   "description": "监听币安接口，生成完整 curl 命令",
   "permissions": ["activeTab", "tabs", "debugger", "storage"],
   "background": { "service_worker": "background.js" },
